@@ -1,0 +1,45 @@
+from tkinter import *
+class Calculator:
+    def __init__(self, master):
+        self.master = master
+        master.title("My Calculator")
+        self.equation = Entry(master, width=20, font=("Copperplate", 20), bd=7, insertwidth=4, justify="left")
+        self.equation.grid(row=0, column=0, columnspan=5, padx=10, pady=10)
+        self.create_buttons()
+    def create_buttons(self):
+        buttons = [
+            '7', '8', '9', '/',
+            '4', '5', '6', '*',
+            '1', '2', '3', '-',
+            '0', 'C', '=', '+'
+        ]
+        row_val = 1
+        col_val = 0
+        for button_text in buttons:
+            self.add_button(button_text, row_val, col_val)
+            col_val += 1
+            if col_val > 3:
+                col_val = 0
+                row_val += 1
+    def add_button(self, text, row, column):
+        button = Button(self.master, text=text, padx=30, pady=30, font=("Copperplate", 18), command=lambda: self.button_click(text))
+        button.grid(row=row, column=column)
+    def button_click(self, character):
+        current = self.equation.get()
+        if character == '=':
+            try:
+                result = eval(current)
+                self.equation.delete(0, END)
+                self.equation.insert(0, str(result))
+            except Exception as e:
+                self.equation.delete(0, END)
+                self.equation.insert(0, "Error")
+        elif character == 'C':
+            self.equation.delete(0, END)
+        else:
+            self.equation.delete(0, END)
+            self.equation.insert(0, current + str(character))
+if __name__ == "__main__":
+    root = Tk()
+    my_calculator = Calculator(root)
+    root.mainloop()
